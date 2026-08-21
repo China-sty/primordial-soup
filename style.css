@@ -1,0 +1,85 @@
+:root {
+  --bg: #f7f8fb;
+  --card: #ffffff;
+  --text: #1f2329;
+  --muted: #6b7280;
+  --primary: #4f46e5;
+  --primary-2: #7c3aed;
+  --border: #e7e9ef;
+  --accent: #0ea5e9;
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+}
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, #1e1b4b 0%, #312e81 45%, #4f46e5 100%);
+  color: #fff;
+  text-align: center;
+  padding: 96px 24px 88px;
+}
+.hero-inner { max-width: 720px; margin: 0 auto; }
+.logo { font-size: 56px; line-height: 1; }
+.hero h1 { font-size: 40px; margin: 16px 0 8px; letter-spacing: 1px; }
+.hero h1 span { color: #c7d2fe; }
+.hero .sub { font-size: 17px; color: #dbe2ff; margin: 0; }
+
+/* Projects */
+main { max-width: 1080px; margin: 0 auto; padding: 48px 24px 64px; }
+.projects h2 { font-size: 26px; margin: 0 0 6px; }
+.section-desc { color: var(--muted); margin: 0 0 28px; }
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 20px;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 24px;
+  text-decoration: none;
+  color: var(--text);
+  transition: transform .18s ease, box-shadow .18s ease;
+}
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(31, 35, 41, .12);
+}
+
+.card-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.card-head h3 { margin: 0; font-size: 20px; }
+.status {
+  font-size: 12px;
+  color: #fff;
+  background: #16a34a;
+  border-radius: 20px;
+  padding: 3px 10px;
+  white-space: nowrap;
+}
+.tagline { margin: 0; font-size: 14px; color: var(--primary); font-weight: 600; }
+.desc { margin: 0; font-size: 14px; color: var(--muted); flex: 1; }
+
+.tech { display: flex; flex-wrap: wrap; gap: 6px; }
+.tag {
+  font-size: 12px;
+  color: var(--text);
+  background: #eef0f6;
+  border-radius: 6px;
+  padding: 3px 9px;
+}
+
+/* Footer */
+footer { text-align: center; color: var(--muted); font-size: 13px; padding: 24px; }
