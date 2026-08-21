@@ -19,6 +19,15 @@ const PROJECTS = [
     link: "",
     status: "内部已上线",
   },
+  {
+    name: "LeadForge",
+    tagline: "面向 ToB 制造企业的 AI 获客引擎",
+    description:
+      "通用 AI 获客平台，帮制造企业自动挖掘潜在 B 端客户、评分排序、承接转化。多租户配置化设计：潜客挖掘 + 线索评分 + 老板看板，企业按自身行业画像配置即可使用。",
+    tech: ["Python", "FastAPI", "DeepSeek", "多智能体", "向量检索", "SaaS"],
+    link: "",
+    status: "规划中",
+  },
   // 下一个项目在这里继续加
 ];
 
