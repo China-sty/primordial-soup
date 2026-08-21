@@ -1,4 +1,5 @@
 // 项目数据：后续新增项目，在这里加一条即可。
+// link 可留空（内部项目），留空则不渲染成可点击链接。
 const PROJECTS = [
   {
     name: "PersonaCore",
@@ -9,24 +10,35 @@ const PROJECTS = [
     link: "https://github.com/China-sty/PersonaCore",
     status: "v2.0.0 已上线",
   },
+  {
+    name: "centerBrain",
+    tagline: "代码责任归属 / 缺陷归因分析 Agent",
+    description:
+      "基于 Agentic RAG 架构，将开发者自然语言对话与代码提交日志作为知识源，实现「业务意图 → 责任人反推」（如「胶囊是谁负责」）。三段式架构：意图提取 → 向量检索 → 综合推理，并支持缺陷归因分析（根因 / 责任提交 / 证据链）。",
+    tech: ["Python", "FastAPI", "LangChain", "Milvus", "Agentic RAG", "向量检索"],
+    link: "",
+    status: "内部已上线",
+  },
   // 下一个项目在这里继续加
 ];
 
 function renderProjects() {
   const grid = document.getElementById("projects");
-  grid.innerHTML = PROJECTS.map(
-    (p) => `
-      <a class="card" href="${p.link}" target="_blank" rel="noopener">
-        <div class="card-head">
-          <h3>${p.name}</h3>
-          <span class="status">${p.status}</span>
-        </div>
-        <p class="tagline">${p.tagline}</p>
-        <p class="desc">${p.description}</p>
-        <div class="tech">${p.tech.map((t) => `<span class="tag">${t}</span>`).join("")}</div>
-      </a>
-    `
-  ).join("");
+  grid.innerHTML = PROJECTS.map((p) => {
+    const inner = `
+      <div class="card-head">
+        <h3>${p.name}</h3>
+        <span class="status">${p.status}</span>
+      </div>
+      <p class="tagline">${p.tagline}</p>
+      <p class="desc">${p.description}</p>
+      <div class="tech">${p.tech.map((t) => `<span class="tag">${t}</span>`).join("")}</div>
+    `;
+    if (p.link) {
+      return `<a class="card" href="${p.link}" target="_blank" rel="noopener">${inner}</a>`;
+    }
+    return `<div class="card">${inner}</div>`;
+  }).join("");
 }
 
 document.addEventListener("DOMContentLoaded", renderProjects);
