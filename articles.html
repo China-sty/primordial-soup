@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>文章 · 原始汤 AI 团队</title>
+<link rel="stylesheet" href="style.css">
+<style>
+  .articles-wrap { max-width:760px; margin:0 auto; padding:40px 20px 64px; }
+  .articles-wrap h1 { font-size:26px; margin:0 0 8px; }
+  .back { color:var(--muted); font-size:14px; text-decoration:none; }
+  .back:hover { color:var(--primary); }
+  .alist { margin-top:24px; }
+  .a-item { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:18px 20px; margin-bottom:14px; cursor:pointer; transition:transform .15s, box-shadow .15s; }
+  .a-item:hover { transform:translateY(-2px); box-shadow:0 8px 20px rgba(31,35,41,.1); }
+  .a-item h3 { margin:0 0 6px; font-size:18px; }
+  .a-item .date { color:var(--muted); font-size:12px; }
+  .article-detail { background:var(--card); border-radius:12px; padding:28px; box-shadow:0 1px 4px rgba(0,0,0,.06); }
+  .article-detail h1 { font-size:26px; margin:0 0 8px; }
+  .article-detail .date { color:var(--muted); font-size:13px; margin-bottom:20px; }
+  .article-detail .body { line-height:1.8; font-size:15px; }
+  .article-detail .body h1,.article-detail .body h2,.article-detail .body h3 { margin:1.2em 0 .5em; }
+  .article-detail .body p { margin:.6em 0; }
+  .article-detail .body pre { background:#f6f7f9; padding:14px; border-radius:8px; overflow-x:auto; font-size:13px; }
+  .article-detail .body code { background:#f0f1f5; padding:2px 5px; border-radius:4px; font-size:13px; }
+  .article-detail .body blockquote { border-left:3px solid var(--primary); margin:.6em 0; padding:4px 14px; color:var(--muted); background:#fafbff; border-radius:0 6px 6px 0; }
+  .article-detail .body a { color:var(--primary); }
+</style>
+</head>
+<body>
+<div class="articles-wrap">
+  <a class="back" href="/">← 返回首页</a>
+  <div id="listView">
+    <h1>文章</h1>
+    <div class="alist" id="alist"></div>
+  </div>
+  <div id="detailView" style="display:none">
+    <div class="article-detail">
+      <h1 id="dTitle"></h1>
+      <div class="date" id="dDate"></div>
+      <div class="body" id="dBody"></div>
+    </div>
+  </div>
+</div>
+<script src="md.js"></script>
+<script>
+async function loadList(){
+  const arts = await fetch('/api/articles').then(r=>r.json());
+  const box = document.getElementById('alist');
+  if(!arts.length){ box.innerHTML='<p style="color:#8a919c">暂无文章</p>'; return; }
+  box.innerHTML = arts.map(a=>`<div class="a-item" onclick="openArticle(${a.id})"><h3>${esc(a.title)}</h3><div class="date">${esc(a.created_at||'')}</div></div>`).join('');
+}
+async function openArticle(id){
+  const a = await fetch('/api/articles/'+id).then(r=>r.json());
+  document.getElementById('listView').style.display='none';
+  document.getElementById('detailView').style.display='block';
+  document.getElementById('dTitle').textContent = a.title;
+  document.getElementById('dDate').textContent = a.created_at || '';
+  document.getElementById('dBody').innerHTML = renderMarkdown(a.content);
+}
+function esc(s){ return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+loadList();
+</script>
+</body>
+</html>

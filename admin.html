@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>文章管理 · 原始汤</title>
+<style>
+  :root { --bg:#f5f6f8; --card:#fff; --primary:#4f46e5; --text:#1f2329; --muted:#8a919c; --border:#e7e9ef; --red:#d64545; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif; background:var(--bg); color:var(--text); }
+  .wrap { max-width:960px; margin:0 auto; padding:24px 16px; }
+  h1 { font-size:20px; margin:0; }
+  button { padding:9px 16px; border:none; border-radius:7px; background:var(--primary); color:#fff; font-size:13px; cursor:pointer; }
+  button.ghost { background:#eef1f6; color:var(--text); }
+  button.danger { background:var(--red); }
+  .login { max-width:360px; margin:12vh auto; background:var(--card); border-radius:12px; padding:24px; box-shadow:0 1px 4px rgba(0,0,0,.06); }
+  .login input { width:100%; padding:11px; border:1px solid #d5d9e0; border-radius:7px; font-size:15px; margin-bottom:10px; }
+  .toolbar { display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; }
+  .layout { display:grid; grid-template-columns:260px 1fr; gap:16px; }
+  @media (max-width:720px){ .layout { grid-template-columns:1fr; } }
+  .list { background:var(--card); border-radius:12px; padding:12px; box-shadow:0 1px 4px rgba(0,0,0,.06); max-height:70vh; overflow-y:auto; }
+  .list .item { padding:10px; border-radius:7px; cursor:pointer; font-size:14px; }
+  .list .item:hover { background:#f4f5f9; }
+  .list .item.active { background:#eef0fe; color:var(--primary); }
+  .form { background:var(--card); border-radius:12px; padding:16px; box-shadow:0 1px 4px rgba(0,0,0,.06); }
+  .form input { width:100%; padding:11px; border:1px solid #d5d9e0; border-radius:7px; font-size:15px; margin-bottom:10px; }
+  .form textarea { width:100%; min-height:360px; padding:11px; border:1px solid #d5d9e0; border-radius:7px; font-size:14px; font-family:monospace; line-height:1.6; margin-bottom:10px; }
+  .actions { display:flex; gap:8px; }
+  .err { color:var(--red); font-size:13px; margin-top:8px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div id="login" class="login">
+    <h1 style="margin-bottom:14px">文章管理</h1>
+    <input type="password" id="pwd" placeholder="管理员密码" onkeydown="if(event.key==='Enter')login()">
+    <button onclick="login()">登录</button>
+    <div class="err" id="err"></div>
+  </div>
+
+  <div id="editor" style="display:none">
+    <div class="toolbar">
+      <h1>文章管理</h1>
+      <div><button class="ghost" onclick="newArticle()">新建</button> <button class="ghost" onclick="back()">← 返回站点</button></div>
+    </div>
+    <div class="layout">
+      <div class="list" id="list"></div>
+      <div class="form">
+        <input id="title" placeholder="文章标题">
+        <textarea id="content" placeholder="Markdown 内容（支持 # 标题、**加粗**、- 列表、```代码``` 等）"></textarea>
+        <div class="actions">
+          <button onclick="save()">保存</button>
+          <button class="danger" onclick="remove()">删除</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+let articles = [], currentId = null;
+
+async function login(){
+  const pwd = document.getElementById('pwd').value;
+  const r = await fetch('/api/login', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({password:pwd})});
+  if(!r.ok){ document.getElementById('err').textContent='密码错误'; return; }
+  document.getElementById('login').style.display='none';
+  document.getElementById('editor').style.display='block';
+  load();
+}
+async function load(){
+  articles = await fetch('/api/articles').then(r=>r.json());
+  const box = document.getElementById('list');
+  box.innerHTML = articles.map(a=>`<div class="item" onclick="edit(${a.id})">${esc(a.title)}</div>`).join('') || '<div style="color:#8a919c;padding:10px">暂无文章</div>';
+}
+async function edit(id){
+  currentId = id;
+  const a = await fetch('/api/articles/'+id).then(r=>r.json());
+  document.getElementById('title').value = a.title;
+  document.getElementById('content').value = a.content;
+  document.querySelectorAll('.list .item').forEach(el=>el.classList.remove('active'));
+  event.target.classList.add('active');
+}
+function newArticle(){
+  currentId = null;
+  document.getElementById('title').value = '';
+  document.getElementById('content').value = '';
+  document.querySelectorAll('.list .item').forEach(el=>el.classList.remove('active'));
+}
+async function save(){
+  const title = document.getElementById('title').value.trim();
+  const content = document.getElementById('content').value;
+  if(!title){ alert('请填标题'); return; }
+  const body = JSON.stringify({title, content});
+  if(currentId){
+    await fetch('/api/articles/'+currentId, {method:'PUT', headers:{'Content-Type':'application/json'}, body});
+  } else {
+    await fetch('/api/articles', {method:'POST', headers:{'Content-Type':'application/json'}, body});
+  }
+  load();
+}
+async function remove(){
+  if(!currentId){ return; }
+  if(!confirm('确定删除这篇？')) return;
+  await fetch('/api/articles/'+currentId, {method:'DELETE'});
+  newArticle(); load();
+}
+function back(){ location.href='/'; }
+function esc(s){ return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+</script>
+</body>
+</html>
