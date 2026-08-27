@@ -80,6 +80,17 @@ main { max-width: 1080px; margin: 0 auto; padding: 48px 24px 64px; }
   border-radius: 6px;
   padding: 3px 9px;
 }
+.links { display: flex; gap: 8px; margin-top: 2px; }
+.cardlink {
+  font-size: 13px;
+  color: var(--primary);
+  text-decoration: none;
+  padding: 5px 12px;
+  border: 1px solid var(--primary);
+  border-radius: 6px;
+  transition: background .15s, color .15s;
+}
+.cardlink:hover { background: var(--primary); color: #fff; }
 
 /* Footer */
 footer { text-align: center; color: var(--muted); font-size: 13px; padding: 24px; }
