@@ -1,0 +1,23 @@
+[Unit]
+Description=Primordial Soup team site
+After=network.target
+
+[Service]
+Type=simple
+User=soup
+Group=soup
+WorkingDirectory=/opt/primordial-soup
+ExecStart=/opt/primordial-soup/.venv/bin/uvicorn server:app --host 127.0.0.1 --port 8004
+
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=strict
+ProtectHome=yes
+ReadWritePaths=/opt/primordial-soup
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target
