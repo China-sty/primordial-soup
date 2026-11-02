@@ -31,6 +31,16 @@ const PROJECTS = [
     site: "http://47.103.49.141:8081",
     status: "已上线",
   },
+  {
+    name: "Ty1",
+    tagline: "股票交易看板 + 选股平台",
+    description:
+      "个人股票看板与选股平台：自选股实时行情看板 + 条件选股（涨跌幅 / 价格区间），接入 akshare 真实行情源。前后端分离架构（FastAPI + React），预留移动端扩展。",
+    tech: ["Python", "FastAPI", "React", "akshare", "REST API"],
+    link: "",
+    site: "http://47.103.49.141:8082",
+    status: "已上线",
+  },
   // 下一个项目在这里继续加
 ];
 

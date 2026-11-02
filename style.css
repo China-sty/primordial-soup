@@ -23,13 +23,13 @@ body {
   background: linear-gradient(135deg, #1e1b4b 0%, #312e81 45%, #4f46e5 100%);
   color: #fff;
   text-align: center;
-  padding: 96px 24px 88px;
+  padding: 0 24px 40px;
 }
-.hero-inner { max-width: 720px; margin: 0 auto; }
-.logo { font-size: 56px; line-height: 1; }
-.hero h1 { font-size: 40px; margin: 16px 0 8px; letter-spacing: 1px; }
+.hero-inner { max-width: 720px; margin: 0 auto; padding-top: 24px; }
+.logo { font-size: 34px; line-height: 1; }
+.hero h1 { font-size: 32px; margin: 10px 0 6px; letter-spacing: .5px; }
 .hero h1 span { color: #c7d2fe; }
-.hero .sub { font-size: 17px; color: #dbe2ff; margin: 0; }
+.hero .sub { font-size: 15px; color: #dbe2ff; margin: 0; }
 
 /* Projects */
 main { max-width: 1080px; margin: 0 auto; padding: 48px 24px 64px; }
@@ -94,3 +94,88 @@ main { max-width: 1080px; margin: 0 auto; padding: 48px 24px 64px; }
 
 /* Footer */
 footer { text-align: center; color: var(--muted); font-size: 13px; padding: 24px; }
+footer a { color: var(--muted); text-decoration: none; }
+footer a:hover { color: var(--primary); }
+
+/* ============================================================
+   顶部导航（首页 / 博客 / 文章页共用）
+   ============================================================ */
+.site-nav { position: relative; z-index: 5; }
+.site-nav-inner {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 20px; max-width: 1080px; margin: 0 auto; padding: 22px 24px;
+}
+.site-nav .brand {
+  display: flex; align-items: center; gap: 9px;
+  font-weight: 700; font-size: 16px; letter-spacing: .4px; text-decoration: none;
+}
+.site-nav .brand .dot {
+  width: 9px; height: 9px; border-radius: 50%; flex: none;
+  background: linear-gradient(135deg, #818cf8, #22d3ee);
+  box-shadow: 0 0 12px rgba(129, 140, 248, .8);
+}
+.site-nav .links { display: flex; align-items: center; gap: 24px; }
+.site-nav .links a { font-size: 14px; text-decoration: none; transition: color .15s; }
+.site-nav--dark { color: #e7eaff; }
+.site-nav--dark .brand { color: #fff; }
+.site-nav--dark .links a { color: #b9c1e8; }
+.site-nav--dark .links a:hover, .site-nav--dark .links a.active { color: #fff; }
+.site-nav--light {
+  color: var(--text);
+  background: rgba(255, 255, 255, .92);
+  border-bottom: 1px solid var(--border);
+  -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+}
+.site-nav--light .brand { color: var(--text); }
+.site-nav--light .links a { color: var(--muted); }
+.site-nav--light .links a:hover, .site-nav--light .links a.active { color: var(--primary); }
+
+/* ============================================================
+   首页「技术博客」板块
+   ============================================================ */
+.blog-strip { margin-top: 64px; }
+.strip-head {
+  display: flex; align-items: flex-end; justify-content: space-between;
+  gap: 16px; margin-bottom: 4px;
+}
+.strip-head h2 { font-size: 26px; margin: 0 0 6px; }
+.strip-head .more {
+  font-size: 13.5px; color: var(--primary); text-decoration: none;
+  padding-bottom: 6px; white-space: nowrap;
+}
+.strip-head .more:hover { text-decoration: underline; }
+.blog-strip .section-desc { margin-bottom: 24px; }
+
+.post-card {
+  position: relative; overflow: hidden;
+  display: flex; flex-direction: column; gap: 10px;
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 14px; padding: 22px 22px 20px;
+  text-decoration: none; color: var(--text);
+  transition: transform .18s ease, box-shadow .18s ease;
+}
+.post-card::before {
+  content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+  background: linear-gradient(180deg, #6366f1, #22d3ee);
+  opacity: .9;
+}
+.post-card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(31, 35, 41, .12); }
+.post-card .p-num {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 10.5px; letter-spacing: .14em;
+  color: #9aa2b8;
+}
+.post-card h3 { margin: 0; font-size: 17px; line-height: 1.5; letter-spacing: -.01em; }
+.post-card p {
+  margin: 0; font-size: 13.5px; color: var(--muted); line-height: 1.75;
+  display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.post-card .p-meta { display: flex; gap: 7px; font-size: 12px; color: #98a0b3; margin-top: 2px; }
+
+@media (max-width: 560px) {
+  .site-nav-inner { padding: 18px; }
+  .site-nav .links { gap: 14px; }
+  .site-nav .links a { font-size: 13px; }
+  .strip-head { flex-direction: column; align-items: flex-start; }
+}

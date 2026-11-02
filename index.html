@@ -3,14 +3,23 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>原始汤 AI 团队 · Primordial Soup</title>
-<link rel="stylesheet" href="style.css">
+<title>Primordial Soup · AI Team</title>
+<link rel="stylesheet" href="style.css?v=20261023a">
 </head>
 <body>
   <header class="hero">
+    <nav class="site-nav site-nav--dark">
+      <div class="site-nav-inner">
+        <a class="brand" href="/"><span class="dot"></span>Primordial Soup</a>
+        <div class="links">
+          <a href="/" class="active">项目</a>
+          <a href="/blog">技术博客</a>
+        </div>
+      </div>
+    </nav>
     <div class="hero-inner">
       <div class="logo">🧫</div>
-      <h1>原始汤 <span>AI 团队</span></h1>
+      <h1>Primordial <span>Soup</span></h1>
       <p class="sub">从零开始，孕育智能 —— 专注多智能体与多模态 AI 系统的探索与实践。</p>
     </div>
   </header>
@@ -21,12 +30,49 @@
       <p class="section-desc">我们正在做的事情，持续更新中。</p>
       <div id="projects" class="grid"></div>
     </section>
+
+    <section class="blog-strip">
+      <div class="strip-head">
+        <div>
+          <h2>技术博客</h2>
+          <p class="section-desc">工程笔记：Agent、Android Framework、RAG 与多智能体系统。</p>
+        </div>
+        <a class="more" href="/blog">全部文章 →</a>
+      </div>
+      <div id="latestPosts" class="grid"></div>
+    </section>
   </main>
 
   <footer>
-    <p>© 2026 原始汤 AI 团队 · Primordial Soup　|　<a href="/articles" style="color:var(--muted)">文章</a></p>
+    <p>© 2026 Primordial Soup　|　<a href="/blog">技术博客</a></p>
   </footer>
 
   <script src="projects.js?v=20260827"></script>
+  <script>
+    // 首页只展示最新 3 篇博客，数据来自 /api/blog
+    (function () {
+      var box = document.getElementById("latestPosts");
+      function esc(s) {
+        return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
+          return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+        });
+      }
+      fetch("/api/blog")
+        .then(function (r) { return r.json(); })
+        .then(function (data) {
+          var posts = (data.posts || []).slice(-3).reverse();
+          if (!posts.length) { box.innerHTML = ""; return; }
+          box.innerHTML = posts.map(function (p, i) {
+            return '<a class="post-card" href="/blog/' + encodeURIComponent(p.slug) + '">' +
+              '<span class="p-num">' + (i === 0 ? "最新 · " : "") + esc(p.series || "技术博客") + "</span>" +
+              "<h3>" + esc(p.title) + "</h3>" +
+              "<p>" + esc(p.excerpt) + "</p>" +
+              '<div class="p-meta"><span>' + (p.reading || 1) + " 分钟阅读</span></div>" +
+              "</a>";
+          }).join("");
+        })
+        .catch(function () { box.innerHTML = ""; });
+    })();
+  </script>
 </body>
 </html>

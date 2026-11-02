@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>技术博客 · Primordial Soup</title>
+<meta name="description" content="Primordial Soup 技术博客：工程笔记与踩坑记录，覆盖移动端 Agent、Android Framework 与多智能体系统。">
+<link rel="stylesheet" href="/style.css?v=20261023a">
+<link rel="stylesheet" href="/blog.css?v=20261023d">
+</head>
+<body class="blog-body">
+
+<!-- 图标雪碧图 -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="i-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z"/>
+    <circle cx="12" cy="12" r="3"/>
+  </symbol>
+  <symbol id="i-hand" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M9 11.5V4.6a1.6 1.6 0 0 1 3.2 0v6"/>
+    <path d="M12.2 10.4V6.2a1.6 1.6 0 0 1 3.2 0v4.6"/>
+    <path d="M15.4 11.2V8.6a1.6 1.6 0 0 1 3.2 0v6.2a6.2 6.2 0 0 1-6.2 6.2h-.9a5 5 0 0 1-3.8-1.7l-3.3-4.1a1.6 1.6 0 0 1 2.4-2.1L9 15"/>
+  </symbol>
+  <symbol id="i-key" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="7.6" cy="7.6" r="3.6"/>
+    <path d="M10.4 10.4 20 20"/>
+    <path d="M15.8 15.8 18 13.6"/>
+    <path d="M18.4 18.4 20.6 16.2"/>
+  </symbol>
+  <symbol id="i-doc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M6.5 3h7l4.5 4.5V21h-11.5z"/>
+    <path d="M13.5 3v4.5H18"/>
+    <path d="M9 12.5h6M9 16h6"/>
+  </symbol>
+  <symbol id="i-image" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="3" y="4" width="18" height="16" rx="2.5"/>
+    <circle cx="8.6" cy="9.4" r="1.5"/>
+    <path d="M21 15.4 16.2 10.6 7.4 19.4"/>
+  </symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 3 19 6v5.4c0 4.4-2.9 8.3-7 9.6-4.1-1.3-7-5.2-7-9.6V6z"/>
+    <path d="m9.2 12.1 2 2 3.7-4"/>
+  </symbol>
+  <symbol id="i-graph" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="6" cy="6" r="2.6"/>
+    <circle cx="18" cy="8" r="2.6"/>
+    <circle cx="11.5" cy="18" r="2.6"/>
+    <path d="M8.4 6.7 15.5 7.6M7.3 8.4l2.9 7.2M16.4 10.4l-3.4 5.3"/>
+  </symbol>
+  <symbol id="i-branch" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="6.5" cy="5" r="2.2"/>
+    <circle cx="6.5" cy="19" r="2.2"/>
+    <circle cx="17.5" cy="8" r="2.2"/>
+    <path d="M6.5 7.2v9.6"/>
+    <path d="M17.5 10.2c0 3.9-2.8 5.7-6.3 6.2"/>
+  </symbol>
+  <symbol id="i-pulse" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M2.5 12h4l2.4-6.5 4 13 2.4-6.5h6.2"/>
+  </symbol>
+  <symbol id="i-route" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="5.5" cy="5.5" r="2.2"/>
+    <circle cx="12" cy="12" r="2.2"/>
+    <circle cx="18.5" cy="18.5" r="2.2"/>
+    <path d="M7.7 6.4 10 10M14 14l2.3 3.6"/>
+  </symbol>
+  <symbol id="i-radar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="8.5"/>
+    <circle cx="12" cy="12" r="4.4"/>
+    <path d="M12 12 17.8 7.2"/>
+    <circle cx="12" cy="12" r="1.1"/>
+  </symbol>
+  <symbol id="i-gauge" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M4 17a8 8 0 1 1 16 0"/>
+    <path d="M12 17 15.6 10.6"/>
+    <circle cx="12" cy="17" r="1.4"/>
+  </symbol>
+</svg>
+
+<!-- ==================== 列表页 ==================== -->
+<div id="viewList" hidden>
+  <header class="b-hero">
+    <nav class="site-nav site-nav--dark">
+      <div class="site-nav-inner">
+        <a class="brand" href="/"><span class="dot"></span>Primordial Soup</a>
+        <div class="links">
+          <a href="/">项目</a>
+          <a href="/blog" class="active">技术博客</a>
+        </div>
+      </div>
+    </nav>
+    <span class="b-hero-mark" aria-hidden="true">&lt;/&gt;</span>
+    <div class="b-hero-inner">
+      <span class="b-eyebrow">Engineering Notes</span>
+      <h1>技术<em>博客</em></h1>
+      <p class="b-hero-sub">
+        工程笔记与踩坑记录：Agent、Android Framework、RAG、研发效能与多智能体系统 ——
+        把「能跑」和「可靠」之间的差距写清楚。
+      </p>
+      <div class="b-hero-stats" id="heroStats"></div>
+    </div>
+  </header>
+
+  <main class="b-main">
+    <div id="sectionsSlot"></div>
+
+    <div class="b-note">
+      <div class="b-note-icon">🧭</div>
+      <div>
+        <h4>关于这个板块</h4>
+        <p>
+          文章来自真实的工程实践：Agent、Android Framework、RAG 与多智能体系统的踩坑记录，
+          数据来自我们自己的回归集。写作目的是把「能跑」和「可靠」之间的差距讲清楚 ——
+          如果你也在做类似的事，欢迎交流。
+        </p>
+      </div>
+    </div>
+  </main>
+
+  <footer class="b-foot">
+    <div class="b-foot-inner">
+      <span>© 2026 Primordial Soup</span>
+      <span><a href="/">返回首页</a></span>
+    </div>
+  </footer>
+</div>
+
+<!-- ==================== 文章页 ==================== -->
+<div id="viewPost" hidden>
+  <div class="b-progress"><i id="progressBar"></i></div>
+
+  <header class="b-post-hero">
+    <nav class="site-nav site-nav--dark">
+      <div class="site-nav-inner">
+        <a class="brand" href="/"><span class="dot"></span>Primordial Soup</a>
+        <div class="links">
+          <a href="/">项目</a>
+          <a href="/blog" class="active">技术博客</a>
+        </div>
+      </div>
+    </nav>
+    <span class="b-post-icon" id="postIcon"></span>
+    <div class="b-hero-inner">
+      <a class="b-crumb" href="/blog">← 全部文章</a>
+      <h1 id="postTitle"></h1>
+      <p class="b-post-sub" id="postSub"></p>
+      <div class="b-post-meta">
+        <span class="b-chip" id="postSeries" style="--accent:#818cf8;color:#c7d0ff;background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.16)"></span>
+        <span id="postMeta" style="display:flex;align-items:center;gap:12px;flex-wrap:wrap"></span>
+      </div>
+      <div class="b-post-tags" id="postTags"></div>
+    </div>
+  </header>
+
+  <div class="b-post-main">
+    <aside class="b-toc" id="toc">
+      <button class="b-toc-toggle" id="tocToggle" type="button">目录</button>
+      <div class="b-toc-head"><span>Contents</span></div>
+      <nav class="b-toc-nav" id="tocNav"></nav>
+    </aside>
+
+    <article class="b-article">
+      <div class="b-content" id="postBody"></div>
+      <div class="b-article-foot" id="postFoot"></div>
+    </article>
+  </div>
+
+  <footer class="b-foot">
+    <div class="b-foot-inner">
+      <span>© 2026 Primordial Soup</span>
+      <span><a href="/">返回首页</a>　·　<a href="/blog">全部文章</a></span>
+    </div>
+  </footer>
+
+  <button class="b-backtop" id="backTop" type="button" aria-label="回到顶部">↑</button>
+</div>
+
+<!-- ==================== 404 ==================== -->
+<div id="viewNotFound" hidden>
+  <nav class="site-nav site-nav--light">
+    <div class="site-nav-inner">
+      <a class="brand" href="/"><span class="dot"></span>Primordial Soup</a>
+      <div class="links">
+        <a href="/">项目</a>
+        <a href="/blog" class="active">技术博客</a>
+      </div>
+    </div>
+  </nav>
+  <div style="max-width:640px;margin:12vh auto;padding:0 24px;text-align:center">
+    <p style="font-size:44px;margin:0">🫥</p>
+    <h1 style="font-size:22px;margin:18px 0 8px">这篇文章不存在</h1>
+    <p style="color:var(--muted);font-size:14px">链接可能已经变更，或者文章已被移动。</p>
+    <p style="margin-top:22px"><a href="/blog" style="color:var(--primary);text-decoration:none">← 返回博客列表</a></p>
+  </div>
+</div>
+
+<script src="/blog.js?v=20261023e"></script>
+</body>
+</html>
